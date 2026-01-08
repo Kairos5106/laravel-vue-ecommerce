@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
@@ -14,7 +16,7 @@ class CartController extends Controller
         // Default to empty array if session is empty
         $cart = session()->get('cart', []);
 
-        if(isset($cart[$product->id])) {
+        if (isset($cart[$product->id])) {
             $cart[$product->id]['quantity']++;
         } else {
             $cart[$product->id] = [
@@ -72,5 +74,43 @@ class CartController extends Controller
         }
 
         return back();
+    }
+
+    public function checkout()
+    {
+        $cart = session()->get('cart', []);
+
+        try {
+            // 1. Create the Order
+            $order = Order::create([
+                'user_id' => auth()->id(),
+                'total_amount' => collect($cart)->sum(fn($i) => $i['price'] * $i['quantity']),
+                'status' => 'pending',
+            ]);
+
+            if (!$order->id) {
+                throw new \Exception("Order created but ID is NULL");
+            }
+
+            foreach ($cart as $id => $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $id,
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ]);
+            }
+
+            session()->forget('cart');
+            return redirect()->route('catalogue');
+
+        } catch (\Exception $e) {
+            // This will print the error and the EXACT state of the $order variable
+            dd([
+                'Error' => $e->getMessage(),
+                'Order_ID' => $order->id ?? 'STILL NULL',
+                'Current_Cart' => $cart
+            ]);
+        }
     }
 }

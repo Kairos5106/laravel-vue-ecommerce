@@ -3,20 +3,20 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import { toImageName } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 
 const props = defineProps({
     products: Array,
-    filters: Object,
+    // filters: Object,
 });
 
-const search = ref(props.filters.search);
+// const search = ref(props.filters.search);
 
-function handleSearch() {
-    router.get('/catalogue', { search: search.value }, { preserveState: true });
-};
+// function handleSearch() {
+//     router.get('/catalogue', { search: search.value }, { preserveState: true });
+// };
 
 function addToCart(product) {
     router.post(
@@ -47,7 +47,7 @@ function addToCart(product) {
         <div class="laptop:p-10 container mx-auto p-6">
             <h1 class="mb-6 text-3xl font-bold">Gaming for You!</h1>
 
-            <div class="mb-6">
+            <!-- <div class="mb-6">
                 <input
                     v-model="search"
                     @input="handleSearch"
@@ -55,7 +55,7 @@ function addToCart(product) {
                     placeholder="Search products..."
                     class="w-full max-w-sm rounded border p-2"
                 />
-            </div>
+            </div> -->
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
                 <Card

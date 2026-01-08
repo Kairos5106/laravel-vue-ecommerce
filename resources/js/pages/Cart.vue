@@ -29,7 +29,19 @@ const totalPrice = computed(() => {
 });
 
 function placeOrder() {
-    router.post(route('checkout'));
+    router.post('checkout', {}, {
+        onSuccess: () => {
+            alert('Order sent successfully!')
+        },
+        onError: () => {
+            alert('Failed to send order. Please try again later.');
+        },
+        preserveScroll: true,
+    });
+    const cartProductIds = Object.values(props.cart).map((c) => c.id);
+    cartProductIds.forEach(element => {
+        clearQuantity(element);
+    });
 }
 
 function updateQuantity(product_id, action) {
@@ -158,7 +170,11 @@ function clearQuantity(product_id) {
                             </div>
                         </CardContent>
                     </Card>
-                    <Button variant="default" class="w-full">
+                    <Button
+                        variant="default"
+                        class="w-full"
+                        @click="() => placeOrder()"
+                    >
                         Place Order
                     </Button>
                 </div>

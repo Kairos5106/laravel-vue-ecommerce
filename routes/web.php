@@ -43,4 +43,7 @@ Route::post('/cart/decrement/{id}', [CartController::class, 'decrement'])
 Route::post('/cart/clear/{id}', [CartController::class, 'clear'])
 ->name('cart.clear');
 
+Route::post('/checkout', [CartController::class, 'checkout'])
+->name('cart.checkout');
+
 require __DIR__ . '/settings.php';
