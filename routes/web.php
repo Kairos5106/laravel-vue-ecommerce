@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -27,5 +28,8 @@ Route::get('cart', function () {
     return Inertia::render('Cart');
 })
 ->name('cart');
+
+Route::post('cart', [CartController::class, 'store'])
+->name('cart.store');
 
 require __DIR__ . '/settings.php';

@@ -11,13 +11,14 @@ const props = defineProps({
 
 const search = ref(props.filters.search);
 
-// Simple logic to handle search filtering
 const handleSearch = () => {
     router.get('/catalogue', { search: search.value }, { preserveState: true });
 };
 
 const addToCart = (product) => {
-    // This is where you would call an Inertia post request to save to session/DB [cite: 5]
+    router.post('/cart', { product_id: product.id }, {
+        onSuccess: () => console.log(`${product.name} [${product.id}] added successfully!`)
+    });
     alert(`${product.name} added to cart!`);
 };
 </script>
