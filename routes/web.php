@@ -34,4 +34,13 @@ Route::get('cart', function () {
 Route::post('cart', [CartController::class, 'store'])
 ->name('cart.store');
 
+Route::post('/cart/increment/{id}', [CartController::class, 'increment'])
+->name('cart.increment');
+
+Route::post('/cart/decrement/{id}', [CartController::class, 'decrement'])
+->name('cart.decrement');
+
+Route::post('/cart/clear/{id}', [CartController::class, 'clear'])
+->name('cart.clear');
+
 require __DIR__ . '/settings.php';

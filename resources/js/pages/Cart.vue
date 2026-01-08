@@ -1,88 +1,137 @@
 <!-- eslint-disable vue/block-lang -->
 <script setup>
+import { Button } from '@/components/ui/button';
 import Card from '@/components/ui/card/Card.vue';
 import CardContent from '@/components/ui/card/CardContent.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { computed } from 'vue';
-import { router } from '@inertiajs/vue3';
 import {
     Table,
-    TableHeader,
     TableBody,
-    TableRow,
     TableCell,
-} from "@/components/ui/table";
-import { Button } from '@/components/ui/button';
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { toImageName } from '@/lib/utils';
+import { router } from '@inertiajs/vue3';
+import { Trash2 } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 const props = defineProps({
-    cart: Object
+    cart: Object,
 });
 
 const totalPrice = computed(() => {
-    return Object.values(props.cart).reduce((acc, item) => acc + (item.price * item.quantity), 0)
+    return Object.values(props.cart).reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0,
+    );
 });
 
 function placeOrder() {
     router.post(route('checkout'));
 }
 
+function updateQuantity(product_id, action) {
+    const url =
+        action === 'inc'
+            ? `/cart/increment/${product_id}`
+            : `/cart/decrement/${product_id}`;
+    return router.post(url, {}, { preserveScroll: true });
+}
+
+function clearQuantity(product_id) {
+    return router.post(`/cart/clear/${product_id}`, {}, { preserveScroll: true });
+}
+
 </script>
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="container mx-auto p-6 laptop:p-10">
-            <h1 class="text-2xl lg:text-3xl font-bold pb-6">Your Cart</h1>
+        <div class="laptop:p-10 container mx-auto p-6">
+            <h1 class="pb-6 text-2xl font-bold lg:text-3xl">Your Cart</h1>
 
-            <div class="grid gap-3 lg:grid-cols-[1fr_300px] relative">
+            <div class="relative grid gap-3 lg:grid-cols-[1fr_300px]">
                 <Card class="overflow-x-scroll">
                     <CardContent>
                         <div
                             v-if="$page.props.cartCount == 0"
-                            class="w-full h-full flex items-center justify-center text-sm text-gray-500"
+                            class="flex h-full w-full items-center justify-center text-sm text-gray-500"
                         >
                             No items in cart.
                         </div>
-                        <Table
-                            v-if="$page.props.cartCount > 0"
-                        >
+                        <Table v-if="$page.props.cartCount > 0">
                             <TableHeader>
                                 <TableRow class="text-end">
-                                    <TableCell class="text-start">Item</TableCell>
+                                    <TableCell class="text-start"
+                                        >Item</TableCell
+                                    >
                                     <TableCell></TableCell>
                                     <TableCell>Price</TableCell>
-                                    <TableCell class="text-center">Quantity</TableCell>
+                                    <TableCell class="text-center"
+                                        >Quantity</TableCell
+                                    >
+                                    <TableCell class="">Action</TableCell>
                                 </TableRow>
                             </TableHeader>
                             <TableBody v-for="(item, id) in cart" :key="id">
-                                <TableRow class="text-end h-[100px]">
-                                    <TableCell class="text-start">
+                                <TableRow class="h-[100px] text-end">
+                                    <TableCell class="min-w-[100px]">
                                         <img
                                             :src="`/products/${toImageName(item.name)}.jpg`"
-                                            class="w-[300px] h-auto object-cover"
+                                            class="w-[300px] object-cover lg:h-[300px]"
                                         />
                                     </TableCell>
                                     <TableCell>{{ item.name }}</TableCell>
                                     <TableCell>{{ item.price }}</TableCell>
-                                    <TableCell class="h-[100px] flex items-center! justify-center gap-4">
-                                        <Button
-                                            variant="default"
-                                            size="icon"
-                                            class="rounded-full flex items-center justify-center w-6 h-6 p-1"
+                                    <TableCell class="h-[100px]">
+                                        <div
+                                            class="flex h-full min-h-[100px] w-full items-center justify-center gap-2 lg:gap-3"
                                         >
-                                            -
-                                        </Button>
-                                        <span class="font-bold">
-                                            {{ item.quantity }}
-                                        </span>
-                                        <Button
-                                            variant="default"
-                                            size="icon"
-                                            class="rounded-full flex items-center justify-center w-6 h-6 p-1"
+                                            <Button
+                                                variant="default"
+                                                size="icon"
+                                                class="flex h-6 w-6 items-center justify-center rounded-full p-1"
+                                                @click="
+                                                    updateQuantity(
+                                                        item.id,
+                                                        'dec',
+                                                    )
+                                                "
+                                            >
+                                                -
+                                            </Button>
+                                            <span class="font-bold">
+                                                {{ item.quantity }}
+                                            </span>
+                                            <Button
+                                                variant="default"
+                                                size="icon"
+                                                class="flex h-6 w-6 items-center justify-center rounded-full p-1"
+                                                @click="
+                                                    updateQuantity(
+                                                        item.id,
+                                                        'inc',
+                                                    )
+                                                "
+                                            >
+                                                +
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell class="p-0">
+                                        <div
+                                            class="flex h-full min-h-[100px] w-full items-center justify-center"
                                         >
-                                            +
-                                        </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                class=""
+                                                @click="clearQuantity(item.id)"
+                                            >
+                                                <Trash2 class="h-5 w-5" />
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -93,24 +142,23 @@ function placeOrder() {
                 <div class="sticky top-20 flex flex-col gap-3">
                     <Card class="h-fit">
                         <CardHeader>
-                            <h3 class="font-bold text-lg">Summary</h3>
+                            <h3 class="text-lg font-bold">Summary</h3>
                         </CardHeader>
                         <CardContent>
                             <div class="flex items-center justify-between">
-                                <p> Total Quantity </p>
-                                <p class=""> {{ Object.values(cart).length }} </p>
+                                <p>Total Quantity</p>
+                                <p class="">{{ $page.props.cartCount }}</p>
                             </div>
-                            <div class="h-px bg-stone-300 my-4" />
+                            <div class="my-4 h-px bg-stone-300" />
                             <div class="flex items-center justify-between">
-                                <p> Total Price (MYR) </p>
-                                <p class="font-bold text-lg"> {{ totalPrice  }} </p>
+                                <p>Total Price (MYR)</p>
+                                <p class="text-lg font-bold">
+                                    {{ totalPrice }}
+                                </p>
                             </div>
                         </CardContent>
                     </Card>
-                    <Button
-                        variant="default"
-                        class="w-full"
-                    >
+                    <Button variant="default" class="w-full">
                         Place Order
                     </Button>
                 </div>

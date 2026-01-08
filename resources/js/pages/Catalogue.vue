@@ -14,22 +14,24 @@ const props = defineProps({
 
 const search = ref(props.filters.search);
 
-const handleSearch = () => {
+function handleSearch() {
     router.get('/catalogue', { search: search.value }, { preserveState: true });
 };
 
-const addToCart = (product) => {
+function addToCart(product) {
     router.post(
         '/cart',
         { product_id: product.id },
         {
-            onSuccess: () =>
+            onSuccess: () => {
                 console.log(
                     `${product.name} [${product.id}] added successfully!`,
-                ),
+                )
+                alert(`1 of ${product.name} has been added to cart!`);
+            },
+            preserveScroll: true,
         },
     );
-    alert(`${product.name} added to cart!`);
 };
 </script>
 
