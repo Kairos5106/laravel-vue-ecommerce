@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -12,17 +13,8 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('catalogue', [ProductController::class, 'index'])
 ->name('catalogue');
-
-Route::get('purchases', function () {
-    return Inertia::render('Purchases');
-})
-->name('purchases');
 
 Route::get('cart', function () {
     return Inertia::render('Cart', [
@@ -45,5 +37,8 @@ Route::post('/cart/clear/{id}', [CartController::class, 'clear'])
 
 Route::post('/checkout', [CartController::class, 'checkout'])
 ->name('cart.checkout');
+
+Route::get('purchases', [PurchaseController::class, 'index'])
+->name('purchases');
 
 require __DIR__ . '/settings.php';

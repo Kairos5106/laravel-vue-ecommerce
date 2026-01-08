@@ -81,7 +81,6 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
 
         try {
-            // 1. Create the Order
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'total_amount' => collect($cart)->sum(fn($i) => $i['price'] * $i['quantity']),
@@ -105,7 +104,6 @@ class CartController extends Controller
             return redirect()->route('catalogue');
 
         } catch (\Exception $e) {
-            // This will print the error and the EXACT state of the $order variable
             dd([
                 'Error' => $e->getMessage(),
                 'Order_ID' => $order->id ?? 'STILL NULL',
