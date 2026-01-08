@@ -29,7 +29,7 @@ const completedOrders = computed(() => {
 
 function markAsReceived(orderId) {
     if (confirm("Are you sure you have received this order?")) {
-        router.post(route('purchases.received', orderId), {}, {
+        router.post(`/purchases/${orderId}/received`, {}, {
             preserveScroll: true,
             onSuccess: () => console.log('Updated!'),
         });
@@ -138,7 +138,7 @@ function markAsReceived(orderId) {
                             <div
                                 v-for="item in order.items"
                                 :key="item.id"
-                                class="flex items-center justify-between border-b pb-4 mt-4"
+                                class="flex items-center justify-between border-b pb-4"
                             >
                                 <div class="flex items-center gap-4">
                                     <div>
@@ -153,7 +153,7 @@ function markAsReceived(orderId) {
                                 <p>{{ formatCurrency(item.price) }}</p>
                             </div>
                         </CardContent>
-                        <CardFooter class="flex w-full justify-end py-4!">
+                        <CardFooter class="flex w-full justify-end">
                             <Button variant="outline"> Rate </Button>
                         </CardFooter>
                     </Card>

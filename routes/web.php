@@ -13,6 +13,10 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('catalogue', [ProductController::class, 'index'])
 ->name('catalogue');
 
@@ -41,7 +45,7 @@ Route::post('/checkout', [CartController::class, 'checkout'])
 Route::get('purchases', [PurchaseController::class, 'index'])
 ->name('purchases');
 
-Route::post('/purchases/{id}/received', [PurchaseController::class, 'received'])
-->name('purchases.received');
+Route::post('/purchases/{id}/received', [PurchaseController::class, 'markAsReceived'])
+    ->name('purchases.received');
 
 require __DIR__ . '/settings.php';
