@@ -13,3 +13,11 @@ export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
 export function toImageName(productName: string) {
     return productName.toLowerCase().replace(/\s+/g, "_");
 }
+
+export function formatCurrency(amount: number) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MYR' }).format(amount);
+};
+
+export function formatDate(date: Date) {
+    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};

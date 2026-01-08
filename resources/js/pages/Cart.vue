@@ -16,6 +16,7 @@ import { toImageName } from '@/lib/utils';
 import { router } from '@inertiajs/vue3';
 import { Trash2 } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { formatCurrency } from '@/lib/utils';
 
 const props = defineProps({
     cart: Object,
@@ -163,9 +164,9 @@ function clearQuantity(product_id) {
                             </div>
                             <div class="my-4 h-px bg-stone-300" />
                             <div class="flex items-center justify-between">
-                                <p>Total Price (MYR)</p>
+                                <p>Total Price</p>
                                 <p class="text-lg font-bold">
-                                    {{ totalPrice }}
+                                    {{ formatCurrency(totalPrice) }}
                                 </p>
                             </div>
                         </CardContent>

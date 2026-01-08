@@ -41,4 +41,7 @@ Route::post('/checkout', [CartController::class, 'checkout'])
 Route::get('purchases', [PurchaseController::class, 'index'])
 ->name('purchases');
 
+Route::post('/purchases/{id}/received', [PurchaseController::class, 'received'])
+->name('purchases.received');
+
 require __DIR__ . '/settings.php';
