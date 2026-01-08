@@ -16,9 +16,9 @@ withDefaults(
 
 <template>
     <header
-        class="w-full flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/70 px-6 lg:px-8 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4 sticky top-0 bg-white"
+        class="z-50 w-full flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/70 px-6 lg:px-8 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4 sticky top-0 bg-white"
     >
-        <div class="w-full flex items-center justify-between gap-2 z-9999">
+        <div class="w-full flex items-center justify-between gap-2">
             <div>
                 <SidebarTrigger class="-ml-1" />
                 <template v-if="breadcrumbs && breadcrumbs.length > 0">

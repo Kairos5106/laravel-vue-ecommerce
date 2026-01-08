@@ -25,9 +25,11 @@ Route::get('purchases', function () {
 ->name('purchases');
 
 Route::get('cart', function () {
-    return Inertia::render('Cart');
+    return Inertia::render('Cart', [
+        'cart' => session()->get('cart', [])
+    ]);
 })
-->name('cart');
+->name('cart.index');
 
 Route::post('cart', [CartController::class, 'store'])
 ->name('cart.store');
