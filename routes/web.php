@@ -18,4 +18,14 @@ Route::get('dashboard', function () {
 Route::get('catalogue', [ProductController::class, 'index'])
 ->name('catalogue');
 
+Route::get('purchases', function () {
+    return Inertia::render('Purchases');
+})
+->name('purchases');
+
+Route::get('cart', function () {
+    return Inertia::render('Cart');
+})
+->name('cart');
+
 require __DIR__ . '/settings.php';

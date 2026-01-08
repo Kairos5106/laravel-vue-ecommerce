@@ -2,6 +2,7 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps({
     products: Array,
@@ -22,32 +23,43 @@ const addToCart = (product) => {
 </script>
 
 <template>
-  <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Product Catalogue</h1>
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <section>
+            <img src="/header.jpg" />
+        </section>
 
-    <div class="mb-6">
-      <input
-        v-model="search"
-        @input="handleSearch"
-        type="text"
-        placeholder="Search products..."
-        class="border p-2 rounded w-full max-w-sm"
-      />
-    </div>
+        <!-- Section for product category filters -->
+        <section>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div v-for="product in products" :key="product.id" class="border p-4 rounded shadow">
-        <h2 class="text-xl font-semibold">{{ product.name }}</h2>
-        <p class="text-gray-600">{{ product.description }}</p>
-        <p class="text-blue-600 font-bold mt-2">${{ product.price }}</p>
+        </section>
 
-        <button
-          @click="addToCart(product)"
-          class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full"
-        >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-  </div>
+        <div class="container mx-auto p-6 laptop:p-10">
+          <h1 class="text-3xl font-bold mb-6">Gaming for You!</h1>
+
+          <div class="mb-6">
+            <input
+              v-model="search"
+              @input="handleSearch"
+              type="text"
+              placeholder="Search products..."
+              class="border p-2 rounded w-full max-w-sm"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div v-for="product in products" :key="product.id" class="border p-4 rounded shadow">
+              <h2 class="text-xl font-semibold">{{ product.name }}</h2>
+              <p class="text-gray-600">{{ product.description }}</p>
+              <p class="text-blue-600 font-bold mt-2">${{ product.price }}</p>
+
+              <button
+                @click="addToCart(product)"
+                class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+    </AppLayout>
 </template>
